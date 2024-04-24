@@ -13,6 +13,7 @@ PRICE_FIELDS = ["open", "high", "low", "close"]
 
 POPULATION_SIZE = 100
 #STRAT_TYPE = ["MACD", "MAC"]
+hall_of_fame = [(0,0), (0,0), (0,0)]
 
 class Strategy:
     def __init__(self, fast_ma=None, slow_ma=None, signal_ma=None, ma_type=None, price_field=None):
@@ -23,14 +24,13 @@ class Strategy:
         self.price_field = price_field
 # 
 
-def generate_initial_strats():
+def generate_random_strats(size):
     starting_strats = []
 
-    for i in range(0, POPULATION_SIZE):
-        #strat = []
+    for i in range(0, size):
+        
         strat = Strategy()
         rand_ma_type = random.randint(0, len(MA_TYPE) - 1)
-        #strat.append(MA_TYPE[rand_ma_type])
         strat.ma_type = MA_TYPE[rand_ma_type]
 
         fast_moving_average = 1
@@ -38,20 +38,18 @@ def generate_initial_strats():
         while slow_moving_average < fast_moving_average:                            #
             fast_moving_average = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
             slow_moving_average = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
-        #strat.append(fast_moving_average)
-        #strat.append(slow_moving_average)
+        
         strat.slow_ma = slow_moving_average
         strat.fast_ma = fast_moving_average
 
         signal_period = random.randint(SIGNAL_PERIOD_MIN, SIGNAL_PERIOD_MAX)
-        #strat.append(signal_period)
         strat.signal_ma = signal_period
 
         price_field = random.randint(0, len(PRICE_FIELDS)-1)
-        #strat.append(PRICE_FIELDS[price_field])
         strat.price_field = PRICE_FIELDS[price_field]
         starting_strats.append(strat)
-
+    
+    
     return starting_strats
 
 
@@ -122,35 +120,145 @@ def strategy_fitness(strat, tickers):
 
     # Calculate the average gain across all stocks
     avg_gain = total_gain / len(tickers)
+    # track the best returns
+    min_tup = min(hall_of_fame, key=lambda x: x[1])
+    if min_tup[1] < avg_gain: hall_of_fame[hall_of_fame.index(min_tup)] = (strat, avg_gain)
 
-    return avg_gain, perc_gains
+    return avg_gain
+
+# 30 percent chance of mutation when preforming uniform crossover
+def mutation_prob():
+    random_number = random.randint(1,10)
+    if random_number <= 3:
+        return True
+    else:
+        return False
+
+# uniform crossover 
+def crossover(strat1, strat2):
+    uniform = random.randint(1,2)
+    if mutation_prob():
+        slow_moving_avg = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
+    else:
+        slow_moving_avg = strat1.slow_ma if uniform == 1 else strat2.slow_ma
+
+    # make sure 
+    uniform = random.randint(1,2)
+    if mutation_prob():
+        fast_moving_avg = 500
+        while fast_moving_avg > slow_moving_avg:
+            fast_moving_avg = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
+    else:
+        fast_moving_avg = strat1.fast_ma if uniform == 1 else strat2.fast_ma
+        if fast_moving_avg > slow_moving_avg and fast_moving_avg == strat1.fast_ma: fast_moving_avg = strat2.fast_ma
+        if fast_moving_avg > slow_moving_avg and fast_moving_avg == strat2.fast_ma: fast_moving_avg = strat1.fast_ma
+
+    
+    uniform = random.randint(1,2)
+    if mutation_prob():
+        signal_moving_avg = random.randint(SIGNAL_PERIOD_MIN, SIGNAL_PERIOD_MAX)
+    else:
+        signal_moving_avg = strat1.signal_ma if uniform == 1 else strat2.signal_ma
 
 
+    uniform = random.randint(1,2)
+    if mutation_prob():
+        rand_ma_type = random.randint(0, len(MA_TYPE) - 1)
+        moving_avg_type = MA_TYPE[rand_ma_type]
+    else:
+        moving_avg_type = strat1.ma_type if uniform == 1 else strat2.ma_type
+    
+    uniform = random.randint(1,2)
+    if mutation_prob():
+        price_f = random.randint(0, len(PRICE_FIELDS)-1)
+        price_type = PRICE_FIELDS[price_f]
+    else:    
+        price_type = strat1.price_field if uniform == 1 else strat2.price_field
+    
+    child = Strategy(fast_ma=fast_moving_avg, slow_ma=slow_moving_avg, signal_ma=signal_moving_avg, ma_type=moving_avg_type, price_field=price_type)
 
-#crossover
+    return child
 
-#mutation
+#produces new population and adds parents to new population: 50 children, 20 parents, 30 new randomly produced
+def breed(breeding_population):
+    # breed 5 times 
+    children = []
+    for i in range(0,5):
+        random.shuffle(breeding_population)
+        for j in range(0,len(breeding_population)-1, 2):
+            parent1 = breeding_population[i]
+            parent2 = breeding_population[i+1]
+            children.append(crossover(parent1[0], parent2[0]))
+
+    random_strats = generate_random_strats(30)
+    return children + random_strats
+
 
 
 #picking parents to breed -- selection 
+# tournament of size 5, so there will be 20 winners 
+# 20 winners = 10 offspring = 30
+# randomly generate 30 new strats
+def tournament_selection(population):
+    breeding_population = []
+
+    random.shuffle(population)
+    tournaments = []
+    for i in range(0, len(population), 5):
+        tournaments.append(population[i:i+5])
+
+    for tournament in tournaments:
+        most_fit = max(tournament, key=lambda x: x[1])
+        breeding_population.append(most_fit)
+
+    untested_population = breed(breeding_population)
+
+    return breeding_population, untested_population
 
 
 
 
 
-test_strat = Strategy(fast_ma=12, slow_ma=26, signal_ma=9, ma_type='exponential', price_field='close')
+def initial_fitness(first_pop, tickers):
+    population = []
+    for ind in first_pop:
+        print("first pop")
+        fitness = strategy_fitness(ind, tickers)
+        population.append((ind, fitness))
+    return population
 
 
-trade = generate_initial_strats()
+#test_strat = Strategy(fast_ma=12, slow_ma=26, signal_ma=9, ma_type='exponential', price_field='close')
+#tickers = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'NFLX', 'GOOG', 'META']
+tickers = ['META']
 
-tickers = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'NFLX', 'GOOG', 'META']
-avg,all = strategy_fitness(test_strat, tickers)
-print(avg)
-print(all)
-
-#print(trade)
+first_pop = generate_random_strats(100)
+population = initial_fitness(first_pop, tickers)
+#avg,all = strategy_fitness(test_strat, tickers)
 
 #download_data(tickers)
 
 
+epochs = 10
 
+for i in range(0,epochs):
+    print(i)
+    breeding_population, untested_population = tournament_selection(population)
+    population.clear()
+    for person in untested_population:
+        fitness_val = strategy_fitness(person, tickers)
+        population.append((person, fitness_val))
+    population = population + breeding_population
+
+############# Print hall of fame and 10 best from last epoch
+
+population = sorted(population, key=lambda x: x[1], reverse=True)
+
+for i in range(0,10):
+    print(population[i][1])
+    print("Fast MA:", population[i][0].fast_ma)
+    print("Slow MA:", population[i][0].slow_ma)
+    print("Signal MA:", population[i][0].signal_ma)
+    print("MA Type:", population[i][0].ma_type)
+    print("Price Field:", population[i][0].price_field)
+    print()
