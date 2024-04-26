@@ -11,6 +11,8 @@ class CMT(bt.Strategy):
     )
 
     def __init__(self):
+        self.num_trades = 0
+
         price_data = getattr(self.data, self.params.price_type)
         if self.params.moving_average_type == 'exponential':
             self.fast_ma = bt.indicators.EMA(price_data, period=self.p.fast_period)
@@ -30,5 +32,7 @@ class CMT(bt.Strategy):
 
         if self.macd_crossover > 0:
             self.buy()  # enter long position
+            self.num_trades += 1
         elif self.macd_crossover < 0:
             self.close()  # close long position
+            self.num_trades += 1

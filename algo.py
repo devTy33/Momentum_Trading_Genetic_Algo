@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 MA_TYPE = ["simple", "exponential"]
 LOWER_MA_LENGTH = 3
+UPPER_MA_FAST_LENGTH = 200
 UPPER_MA_LENGTH = 250
 SIGNAL_PERIOD_MAX = 300
 SIGNAL_PERIOD_MIN = 1
@@ -13,7 +14,16 @@ PRICE_FIELDS = ["open", "high", "low", "close"]
 
 POPULATION_SIZE = 100
 #STRAT_TYPE = ["MACD", "MAC"]
-hall_of_fame = [(0,0), (0,0), (0,0)]
+hall_of_fame = [(0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0])]
+def add_best(trade_strat, avg_gain, num_trades):
+    global hall_of_fame 
+    hall_of_fame = sorted(hall_of_fame, key=lambda x: x[1][0])
+    for i, winner in enumerate(hall_of_fame):
+        if winner[1][0] < avg_gain:
+            hall_of_fame[i] = (trade_strat, [avg_gain, num_trades])
+            break
+
+
 
 class Strategy:
     def __init__(self, fast_ma=None, slow_ma=None, signal_ma=None, ma_type=None, price_field=None):
@@ -36,7 +46,7 @@ def generate_random_strats(size):
         fast_moving_average = 1
         slow_moving_average = 0
         while slow_moving_average < fast_moving_average:                            #
-            fast_moving_average = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
+            fast_moving_average = random.randint(LOWER_MA_LENGTH, UPPER_MA_FAST_LENGTH)
             slow_moving_average = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
         
         strat.slow_ma = slow_moving_average
@@ -70,6 +80,7 @@ def download_data(tickers):
 def strategy_fitness(strat, tickers):
     total_gain = 0
     perc_gains = []
+    total_trades = 0  
     for stock in tickers:
         cerebro = bt.Cerebro()
         cerebro.addsizer(bt.sizers.PercentSizer, percents=100)
@@ -93,6 +104,8 @@ def strategy_fitness(strat, tickers):
         cerebro.broker.setcash(10000.0)
 
         strategies = cerebro.run()
+        num_trades = strategies[0].num_trades
+        total_trades = num_trades
         # plotting -----------
 
         # Plot the stock price and strategy equity
@@ -120,16 +133,13 @@ def strategy_fitness(strat, tickers):
 
     # Calculate the average gain across all stocks
     avg_gain = total_gain / len(tickers)
-    # track the best returns
-    min_tup = min(hall_of_fame, key=lambda x: x[1])
-    if min_tup[1] < avg_gain: hall_of_fame[hall_of_fame.index(min_tup)] = (strat, avg_gain)
-
-    return avg_gain
+    add_best(strat, avg_gain, total_trades)
+    return avg_gain, total_trades
 
 # 30 percent chance of mutation when preforming uniform crossover
 def mutation_prob():
     random_number = random.randint(1,10)
-    if random_number <= 3:
+    if random_number <= 4:
         return True
     else:
         return False
@@ -147,7 +157,7 @@ def crossover(strat1, strat2):
     if mutation_prob():
         fast_moving_avg = 500
         while fast_moving_avg > slow_moving_avg:
-            fast_moving_avg = random.randint(LOWER_MA_LENGTH, UPPER_MA_LENGTH)
+            fast_moving_avg = random.randint(LOWER_MA_LENGTH, UPPER_MA_FAST_LENGTH)
     else:
         fast_moving_avg = strat1.fast_ma if uniform == 1 else strat2.fast_ma
         if fast_moving_avg > slow_moving_avg and fast_moving_avg == strat1.fast_ma: fast_moving_avg = strat2.fast_ma
@@ -182,15 +192,17 @@ def crossover(strat1, strat2):
 #produces new population and adds parents to new population: 50 children, 20 parents, 30 new randomly produced
 def breed(breeding_population):
     # breed 5 times 
+    random.shuffle(breeding_population)
     children = []
-    for i in range(0,5):
-        random.shuffle(breeding_population)
+    for i in range(0,9):
+        #random.shuffle(breeding_population)
         for j in range(0,len(breeding_population)-1, 2):
-            parent1 = breeding_population[i]
-            parent2 = breeding_population[i+1]
+            parent1 = breeding_population[j] # should be j was i
+            parent2 = breeding_population[j+1] # should be j was i
             children.append(crossover(parent1[0], parent2[0]))
+        breeding_population = breeding_population[1:] + breeding_population[:1] #shift the index every time to not get identical children / mates
 
-    random_strats = generate_random_strats(30)
+    random_strats = generate_random_strats(10)
     return children + random_strats
 
 
@@ -208,7 +220,8 @@ def tournament_selection(population):
         tournaments.append(population[i:i+5])
 
     for tournament in tournaments:
-        most_fit = max(tournament, key=lambda x: x[1])
+        #most_fit = max(tournament, key=lambda x: x[1])
+        most_fit = max(tournament, key=lambda x: x[1][0])
         breeding_population.append(most_fit)
 
     untested_population = breed(breeding_population)
@@ -223,14 +236,14 @@ def initial_fitness(first_pop, tickers):
     population = []
     for ind in first_pop:
         print("first pop")
-        fitness = strategy_fitness(ind, tickers)
-        population.append((ind, fitness))
+        fitness, num_trades = strategy_fitness(ind, tickers)
+        population.append((ind, [fitness, num_trades]))
     return population
 
 
 #test_strat = Strategy(fast_ma=12, slow_ma=26, signal_ma=9, ma_type='exponential', price_field='close')
 #tickers = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'NFLX', 'GOOG', 'META']
-tickers = ['META']
+tickers = ['TSLA']
 
 first_pop = generate_random_strats(100)
 population = initial_fitness(first_pop, tickers)
@@ -238,6 +251,12 @@ population = initial_fitness(first_pop, tickers)
 
 #download_data(tickers)
 
+def print_while_run(pop):
+    for strat in pop:
+        print(strat[1][0], end=" ")  # Use space as the end character to print values on the same line
+        # Optionally, you can add a newline character after a certain number of values
+        if (i + 1) % 10 == 0:  # Print a newline after every 10 values
+            print()  # Print a newline
 
 epochs = 10
 
@@ -246,19 +265,37 @@ for i in range(0,epochs):
     breeding_population, untested_population = tournament_selection(population)
     population.clear()
     for person in untested_population:
-        fitness_val = strategy_fitness(person, tickers)
-        population.append((person, fitness_val))
-    population = population + breeding_population
+        fitness_val, num_trades = strategy_fitness(person, tickers)
+        population.append((person, [fitness_val, num_trades]))
+
+    population = population
+    print_while_run(population)
 
 ############# Print hall of fame and 10 best from last epoch
 
 population = sorted(population, key=lambda x: x[1], reverse=True)
 
 for i in range(0,10):
-    print(population[i][1])
+    print("return: ", population[i][1][0])
+    print("number of trades: ", population[i][1][1])
     print("Fast MA:", population[i][0].fast_ma)
     print("Slow MA:", population[i][0].slow_ma)
     print("Signal MA:", population[i][0].signal_ma)
     print("MA Type:", population[i][0].ma_type)
     print("Price Field:", population[i][0].price_field)
     print()
+
+
+print("---------- All Time Winners -----------")
+for winner in hall_of_fame:
+    print("return: ", winner[1][0])
+    print("Number of trades: ", winner[1][1])
+    print("Fast MA:", winner[0].fast_ma)
+    print("Slow MA:", winner[0].slow_ma)
+    print("Signal MA:", winner[0].signal_ma)
+    print("MA Type:", winner[0].ma_type)
+    print("Price Field:", winner[0].price_field)
+    print()
+
+
+# change tournament size to 10, select two winners as breeders. Circular buffer to breed without repeats 
