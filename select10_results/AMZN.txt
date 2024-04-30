@@ -1,0 +1,75 @@
+['AMZN']
+[3247.3124915938506, 3269.5780013253384, 3951.484940036184, 3947.762326786286, 5449.2710567845725, 4875.477749053244, 4939.698845121553, 5938.946054154685, 6888.4886415328465, 8086.14052744193, 8093.599570691469, 7273.271287837326, 7115.1653731863935, 6434.126175579599, 5901.885118594956]
+(309.4168273052703, 533)
+return 9128.481318617743
+Number of trades: 56
+Fast MA: 42
+Slow MA: 145
+Signal MA: 207
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 9128.481318617743
+Number of trades: 56
+Fast MA: 42
+Slow MA: 145
+Signal MA: 207
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 9128.481318617743
+Number of trades: 56
+Fast MA: 42
+Slow MA: 145
+Signal MA: 207
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 9128.481318617743
+Number of trades: 56
+Fast MA: 42
+Slow MA: 145
+Signal MA: 207
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 9128.481318617743
+Number of trades: 56
+Fast MA: 42
+Slow MA: 145
+Signal MA: 207
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 10191.525606619762
+Number of trades: 97
+Fast MA: 93
+Slow MA: 230
+Signal MA: 28
+MA Type: exponential
+Price Field: close
+ -------------- 
+
+return 11645.289152506735
+Number of trades: 52
+Fast MA: 77
+Slow MA: 123
+Signal MA: 126
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 14363.021202981321
+Number of trades: 135
+Fast MA: 47
+Slow MA: 48
+Signal MA: 69
+MA Type: exponential
+Price Field: low
+ -------------- 
+

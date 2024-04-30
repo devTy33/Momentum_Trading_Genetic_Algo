@@ -1,0 +1,75 @@
+['GOOG']
+[317.5694317170229, 407.16581266497326, 441.1128548079103, 429.43886296244136, 519.6885042079441, 512.1308067698918, 565.316693628831, 529.5343850498567, 562.8295920134449, 507.8515305283355, 545.7153040467172, 573.6859053053436, 516.397743871488, 509.58109265552565, 548.9546397868421]
+(397.69344415056867, 384)
+return 716.7205655111035
+Number of trades: 22
+Fast MA: 141
+Slow MA: 248
+Signal MA: 216
+MA Type: simple
+Price Field: high
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 741.1172865908746
+Number of trades: 33
+Fast MA: 171
+Slow MA: 217
+Signal MA: 231
+MA Type: simple
+Price Field: low
+ -------------- 
+

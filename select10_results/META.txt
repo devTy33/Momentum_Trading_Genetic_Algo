@@ -1,0 +1,75 @@
+['META']
+[544.7072724447395, 551.6570097128218, 559.7131841306816, 537.5653015203275, 632.4021277555573, 673.9770619948188, 771.4990140228433, 800.6864045379031, 669.8154111868938, 680.1847424456499, 805.8734975269947, 779.5975287376181, 833.7704428729272, 940.6713041931737, 882.8893005588001]
+(74.66779835839534, 246)
+return 1005.3045579306588
+Number of trades: 17
+Fast MA: 165
+Slow MA: 215
+Signal MA: 198
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 1037.5444631228333
+Number of trades: 42
+Fast MA: 162
+Slow MA: 245
+Signal MA: 10
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 1085.5249837189742
+Number of trades: 63
+Fast MA: 10
+Slow MA: 72
+Signal MA: 84
+MA Type: simple
+Price Field: close
+ -------------- 
+
+return 1216.6206990454398
+Number of trades: 105
+Fast MA: 24
+Slow MA: 114
+Signal MA: 17
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 1280.2109327351943
+Number of trades: 127
+Fast MA: 87
+Slow MA: 170
+Signal MA: 3
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 1280.2109327351943
+Number of trades: 127
+Fast MA: 87
+Slow MA: 170
+Signal MA: 3
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 1322.5223088612036
+Number of trades: 129
+Fast MA: 87
+Slow MA: 169
+Signal MA: 3
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 1322.5223088612036
+Number of trades: 129
+Fast MA: 87
+Slow MA: 169
+Signal MA: 3
+MA Type: exponential
+Price Field: high
+ -------------- 
+

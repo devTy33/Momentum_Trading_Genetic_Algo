@@ -12,9 +12,21 @@ SIGNAL_PERIOD_MAX = 300
 SIGNAL_PERIOD_MIN = 1
 PRICE_FIELDS = ["open", "high", "low", "close"]
 
+average_selected_fitness = []
+
 POPULATION_SIZE = 100
 #STRAT_TYPE = ["MACD", "MAC"]
 hall_of_fame = [(0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0])]
+
+def graph_results():
+    epochs = list(range(25))
+    plt.plot(epochs, average_selected_fitness)
+    plt.xlabel('Epochs')
+    plt.ylabel('Average Selected Fitness')
+    plt.title('Plot of Average Selected Fitness over Epochs')
+    plt.show()
+
+
 def add_best(trade_strat, avg_gain, num_trades):
     global hall_of_fame 
     hall_of_fame = sorted(hall_of_fame, key=lambda x: x[1][0])
@@ -189,12 +201,16 @@ def crossover(strat1, strat2):
 
     return child
 
+
+
 #produces new population and adds parents to new population: 50 children, 20 parents, 30 new randomly produced
 def breed(breeding_population):
     # breed 5 times 
+    fit = [inner_list[0] for _, inner_list in breeding_population]
+    average_selected_fitness.append(sum(fit) / len(fit))
     random.shuffle(breeding_population)
     children = []
-    for i in range(0,9):
+    for i in range(0,10):
         #random.shuffle(breeding_population)
         for j in range(0,len(breeding_population)-1, 2):
             parent1 = breeding_population[j] # should be j was i
@@ -202,8 +218,9 @@ def breed(breeding_population):
             children.append(crossover(parent1[0], parent2[0]))
         breeding_population = breeding_population[1:] + breeding_population[:1] #shift the index every time to not get identical children / mates
 
-    random_strats = generate_random_strats(10)
-    return children + random_strats
+    #random_strats = generate_random_strats(20)
+    # return children + random_strats
+    return children
 
 
 
@@ -258,7 +275,7 @@ def print_while_run(pop):
         if (i + 1) % 10 == 0:  # Print a newline after every 10 values
             print()  # Print a newline
 
-epochs = 20
+epochs = 25
 
 for i in range(0,epochs):
     print(i)
@@ -301,4 +318,4 @@ for winner in hall_of_fame:
 print("--------- Base line strategy -----------")
 print(strategy_fitness(base_strat, tickers))
 
-# change tournament size to 10, select two winners as breeders. Circular buffer to breed without repeats 
+graph_results()

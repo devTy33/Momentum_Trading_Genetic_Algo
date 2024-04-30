@@ -3,6 +3,7 @@ import yfinance as yf
 from backtest import CMT
 import backtrader as bt
 import matplotlib.pyplot as plt
+import itertools
 
 MA_TYPE = ["simple", "exponential"]
 LOWER_MA_LENGTH = 3
@@ -12,9 +13,21 @@ SIGNAL_PERIOD_MAX = 300
 SIGNAL_PERIOD_MIN = 1
 PRICE_FIELDS = ["open", "high", "low", "close"]
 
+average_selected_fitness = []
+
 POPULATION_SIZE = 100
 #STRAT_TYPE = ["MACD", "MAC"]
 hall_of_fame = [(0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0]), (0,[0,0])]
+
+def graph_results():
+    epochs = list(range(15))
+    plt.plot(epochs, average_selected_fitness)
+    plt.xlabel('Epochs')
+    plt.ylabel('Percent Return')
+    plt.title('Plot of Average Selected Fitness over Epochs 5')
+    plt.show()
+
+
 def add_best(trade_strat, avg_gain, num_trades):
     global hall_of_fame 
     hall_of_fame = sorted(hall_of_fame, key=lambda x: x[1][0])
@@ -189,20 +202,36 @@ def crossover(strat1, strat2):
 
     return child
 
+
+
 #produces new population and adds parents to new population: 50 children, 20 parents, 30 new randomly produced
 def breed(breeding_population):
     # breed 5 times 
-    random.shuffle(breeding_population)
-    children = []
-    for i in range(0,9):
-        #random.shuffle(breeding_population)
-        for j in range(0,len(breeding_population)-1, 2):
-            parent1 = breeding_population[j] # should be j was i
-            parent2 = breeding_population[j+1] # should be j was i
-            children.append(crossover(parent1[0], parent2[0]))
-        breeding_population = breeding_population[1:] + breeding_population[:1] #shift the index every time to not get identical children / mates
+    print("pop: ", len(breeding_population))
+    fit = [inner_list[0] for _, inner_list in breeding_population]
+    average_selected_fitness.append(sum(fit) / len(fit))
 
+    random.shuffle(breeding_population)
+    half = len(breeding_population) // 2
+    first_half = breeding_population[:half]
+    second_half = breeding_population[half:]
+
+
+    children = []
+    indexes = list(range(0, len(first_half)))
+    pairs = list(itertools.combinations(indexes, 2))
+    for pair in pairs:
+        parent1 = first_half[pair[0]]
+        parent2 = first_half[pair[1]]
+        children.append(crossover(parent1[0], parent2[0]))
+        parent1 = second_half[pair[0]]
+        parent2 = second_half[pair[1]]
+        children.append(crossover(parent1[0], parent2[0]))
+   
+    print(len(children))
+    #new_pop = children + breeding_population
     random_strats = generate_random_strats(10)
+    # return children + random_strats
     return children + random_strats
 
 
@@ -216,7 +245,7 @@ def tournament_selection(population):
 
     random.shuffle(population)
     tournaments = []
-    for i in range(0, len(population), 5):
+    for i in range(0, len(population), 5):                    #tourny size of 10 now
         tournaments.append(population[i:i+5])
 
     for tournament in tournaments:
@@ -243,7 +272,7 @@ def initial_fitness(first_pop, tickers):
 
 base_strat = Strategy(fast_ma=12, slow_ma=26, signal_ma=9, ma_type='exponential', price_field='close')
 #tickers = ['AAPL', 'TSLA', 'MSFT', 'AMZN', 'NFLX', 'GOOG', 'META']
-tickers = ['TSLA']
+tickers = ['MSFT']
 
 first_pop = generate_random_strats(100)
 population = initial_fitness(first_pop, tickers)
@@ -258,7 +287,7 @@ def print_while_run(pop):
         if (i + 1) % 10 == 0:  # Print a newline after every 10 values
             print()  # Print a newline
 
-epochs = 20
+epochs = 15
 
 for i in range(0,epochs):
     print(i)
@@ -268,7 +297,7 @@ for i in range(0,epochs):
         fitness_val, num_trades = strategy_fitness(person, tickers)
         population.append((person, [fitness_val, num_trades]))
 
-    population = population
+    #population = population + 
     print_while_run(population)
 
 ############# Print hall of fame and 10 best from last epoch
@@ -299,6 +328,27 @@ for winner in hall_of_fame:
 
 
 print("--------- Base line strategy -----------")
-print(strategy_fitness(base_strat, tickers))
+baseline = strategy_fitness(base_strat, tickers)
+print(baseline)
 
-# change tournament size to 10, select two winners as breeders. Circular buffer to breed without repeats 
+#graph_results()
+
+with open('select5_results/MSFT.txt', 'w') as file:
+    file.write(str(tickers)+ '\n')
+    file.write(str(average_selected_fitness) + '\n')
+    file.write(str(baseline) + '\n')
+    for winner in hall_of_fame:
+        file.write("return " + str(winner[1][0]) + '\n')
+        file.write("Number of trades: " + str(winner[1][1]) + '\n')
+        
+        file.write("Fast MA: " + str(winner[0].fast_ma) + '\n')
+        
+        file.write("Slow MA: " + str(winner[0].slow_ma) + '\n')
+        
+        file.write("Signal MA: " + str(winner[0].signal_ma) + '\n')
+        
+        file.write("MA Type: " + str(winner[0].ma_type) + '\n')
+        
+        file.write("Price Field: " + str(winner[0].price_field) + '\n')
+        file.write(' -------------- ' + '\n')
+        file.write('\n')

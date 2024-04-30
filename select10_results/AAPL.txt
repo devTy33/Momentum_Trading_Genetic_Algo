@@ -1,0 +1,75 @@
+['AAPL']
+[24353.017034600423, 25494.069463046704, 32060.084840834472, 36915.50669013607, 46458.10003035675, 60112.276174156206, 57502.84496885154, 60729.30900035806, 66738.33829109182, 70906.3624295345, 68343.15360728613, 68976.38944754052, 65317.035890542415, 58836.521786851656, 65752.98930182091]
+(1113.9012069218961, 819)
+return 77717.66851159596
+Number of trades: 211
+Fast MA: 44
+Slow MA: 81
+Signal MA: 32
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 80143.3203697792
+Number of trades: 123
+Fast MA: 99
+Slow MA: 244
+Signal MA: 43
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 80143.3203697792
+Number of trades: 123
+Fast MA: 99
+Slow MA: 244
+Signal MA: 43
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 84274.44262857783
+Number of trades: 117
+Fast MA: 38
+Slow MA: 157
+Signal MA: 141
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 92159.03987581495
+Number of trades: 203
+Fast MA: 12
+Slow MA: 157
+Signal MA: 141
+MA Type: exponential
+Price Field: low
+ -------------- 
+
+return 114154.49075835581
+Number of trades: 91
+Fast MA: 71
+Slow MA: 136
+Signal MA: 201
+MA Type: exponential
+Price Field: close
+ -------------- 
+
+return 196172.73881097772
+Number of trades: 219
+Fast MA: 32
+Slow MA: 43
+Signal MA: 98
+MA Type: exponential
+Price Field: low
+ -------------- 
+
+return 212430.00608441303
+Number of trades: 224
+Fast MA: 30
+Slow MA: 98
+Signal MA: 43
+MA Type: exponential
+Price Field: low
+ -------------- 
+

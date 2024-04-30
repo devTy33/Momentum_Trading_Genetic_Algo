@@ -1,0 +1,75 @@
+['GOOG']
+[279.01516271258754, 280.2480824926356, 393.5592731065823, 313.17376799789673, 306.2293186269381, 331.81673753568083, 321.12322806234664, 348.3447810925591, 377.12354182410706, 408.51389905457455, 374.6999368111581, 371.2865452525792, 371.8801096016389, 365.1540371561076, 357.32533092625835]
+(397.69344415056867, 384)
+return 637.7735752666881
+Number of trades: 25
+Fast MA: 80
+Slow MA: 245
+Signal MA: 297
+MA Type: simple
+Price Field: open
+ -------------- 
+
+return 646.5027573965697
+Number of trades: 113
+Fast MA: 40
+Slow MA: 101
+Signal MA: 22
+MA Type: exponential
+Price Field: low
+ -------------- 
+
+return 647.5893036657309
+Number of trades: 34
+Fast MA: 151
+Slow MA: 179
+Signal MA: 108
+MA Type: exponential
+Price Field: close
+ -------------- 
+
+return 650.7969640551764
+Number of trades: 37
+Fast MA: 56
+Slow MA: 194
+Signal MA: 268
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 655.6226728316565
+Number of trades: 38
+Fast MA: 49
+Slow MA: 183
+Signal MA: 252
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 665.808839208385
+Number of trades: 29
+Fast MA: 52
+Slow MA: 223
+Signal MA: 297
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 747.3513711687748
+Number of trades: 27
+Fast MA: 52
+Slow MA: 223
+Signal MA: 297
+MA Type: simple
+Price Field: open
+ -------------- 
+
+return 817.994748161683
+Number of trades: 121
+Fast MA: 64
+Slow MA: 136
+Signal MA: 13
+MA Type: exponential
+Price Field: close
+ -------------- 
+

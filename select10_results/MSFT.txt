@@ -1,0 +1,75 @@
+['MSFT']
+[1990.3488443435497, 2679.4566819084716, 2900.5331805354494, 3239.6350980880948, 3350.7339360980914, 4117.192980422285, 3902.173400420607, 4049.703067781472, 4962.112333261738, 6059.067847623559, 6023.40083020863, 5788.324767657865, 5388.7857682875965, 5361.7308323789985, 5044.379726708243]
+(2678.271697380544, 745)
+return 7472.49966002001
+Number of trades: 59
+Fast MA: 134
+Slow MA: 198
+Signal MA: 257
+MA Type: simple
+Price Field: high
+ -------------- 
+
+return 7995.656590370194
+Number of trades: 53
+Fast MA: 134
+Slow MA: 203
+Signal MA: 216
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 7995.656590370194
+Number of trades: 53
+Fast MA: 134
+Slow MA: 203
+Signal MA: 216
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 7995.656590370194
+Number of trades: 53
+Fast MA: 134
+Slow MA: 203
+Signal MA: 216
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 8340.717411114132
+Number of trades: 62
+Fast MA: 129
+Slow MA: 185
+Signal MA: 216
+MA Type: simple
+Price Field: high
+ -------------- 
+
+return 9233.266734449275
+Number of trades: 57
+Fast MA: 134
+Slow MA: 199
+Signal MA: 257
+MA Type: simple
+Price Field: high
+ -------------- 
+
+return 11867.063590571823
+Number of trades: 57
+Fast MA: 131
+Slow MA: 199
+Signal MA: 275
+MA Type: simple
+Price Field: open
+ -------------- 
+
+return 13550.94352217446
+Number of trades: 57
+Fast MA: 131
+Slow MA: 198
+Signal MA: 275
+MA Type: simple
+Price Field: open
+ -------------- 
+

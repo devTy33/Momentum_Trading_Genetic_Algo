@@ -1,0 +1,75 @@
+['TSLA']
+[3211.142591834755, 2365.7749847339082, 3251.11069166128, 2367.2206583851403, 4158.119235246419, 4037.8354664700805, 4351.961811368172, 4209.685216531661, 4282.148793830229, 3913.832980238566, 4896.172090282607, 5306.098420673201, 5401.760995893975, 5311.57834576217, 5498.242090715937]
+(120.71911958648663, 267)
+return 6763.54822891922
+Number of trades: 34
+Fast MA: 58
+Slow MA: 135
+Signal MA: 135
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 6763.54822891922
+Number of trades: 34
+Fast MA: 58
+Slow MA: 135
+Signal MA: 135
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 6798.152896485441
+Number of trades: 92
+Fast MA: 14
+Slow MA: 48
+Signal MA: 137
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 6852.266420395959
+Number of trades: 14
+Fast MA: 110
+Slow MA: 205
+Signal MA: 291
+MA Type: exponential
+Price Field: low
+ -------------- 
+
+return 7987.729939710456
+Number of trades: 10
+Fast MA: 174
+Slow MA: 242
+Signal MA: 290
+MA Type: exponential
+Price Field: open
+ -------------- 
+
+return 8034.975890357049
+Number of trades: 84
+Fast MA: 12
+Slow MA: 65
+Signal MA: 81
+MA Type: exponential
+Price Field: high
+ -------------- 
+
+return 8122.596078297984
+Number of trades: 29
+Fast MA: 32
+Slow MA: 228
+Signal MA: 130
+MA Type: simple
+Price Field: low
+ -------------- 
+
+return 8532.589466117519
+Number of trades: 19
+Fast MA: 72
+Slow MA: 183
+Signal MA: 194
+MA Type: simple
+Price Field: open
+ -------------- 
+
